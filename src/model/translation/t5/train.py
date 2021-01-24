@@ -11,18 +11,17 @@ from functools import partial
 import sys
 
 
-def run(mrnDtPth: str, engDtPth: str,
-        savePth: str, loggingPth: str):
+def run(trainPth: str, validPth: str,
+        savePth: str, loggingPth: str,
+        nEpochs: int, bS: int):
 
     # load tokenizers
     tokenizer = T5TokenizerFast.from_pretrained("t5-small")
     # mrnTok = T5TokenizerFast(mrnTokPth)
 
-    bS = 16
-    maxLen = 300
     # load Data
-    # dataset = utils.getDataset(tokenizer, mrnDtPth, engDtPth, bS)
-    dataset = utils.MyDataset(mrnDtPth, engDtPth)
+    trainDts = utils.MyDataset(trainPth)
+    validDts = utils.MyDataset(validPth)
     collateFn = partial(utils.collateFn, tokenizer=tokenizer)
 
     # load model
@@ -33,19 +32,24 @@ def run(mrnDtPth: str, engDtPth: str,
         decoder_start_token_id=tokenizer.pad_token_id
     )
     model = T5ForConditionalGeneration(modelConfig)
-    print(sum(p.numel() for p in model.parameters()))
+    print("Number of parameters:", sum(p.numel() for p in model.parameters()))
 
     # instantiate training arguments
     args = Seq2SeqTrainingArguments(output_dir=savePth,
-                                    do_train=True,
                                     overwrite_output_dir=True,
-                                    # evaluation_strategy="epoch",
+                                    do_train=True,
+                                    do_eval=True,
+                                    evaluation_strategy="epoch",
                                     per_device_train_batch_size=bS,
+                                    per_device_eval_batch_size=bS,
                                     learning_rate=1e-4,
                                     num_train_epochs=5,
                                     warmup_steps=500,
                                     seed=42,
                                     logging_dir=loggingPth,
+                                    load_best_model_at_end=True,
+                                    metric_for_best_model="eval_bleu",
+                                    save_total_limit=2,
                                     dataloader_num_workers=4)  # 4 * nGpu
 
     trainer = Seq2SeqTrainer(model=model,
@@ -53,8 +57,10 @@ def run(mrnDtPth: str, engDtPth: str,
                              # max_length=maxLen,
                              # num_beams=4,
                              data_collator=collateFn,
-                             train_dataset=dataset)
+                             train_dataset=trainDts,
+                             eval_dataset=validDts)
     trainer.train()
+    return trainer
 
 
 if __name__ == "__main__":

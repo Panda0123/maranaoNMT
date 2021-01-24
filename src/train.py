@@ -22,10 +22,11 @@ def run(model: str):
                config.MRANAX_MODEL_PATH,
                config.MRANAX_LOGGING_PATH)
     if model == "t5":
-        trainT5(config.MRN_WOQ_CLEAN_PATH,
-                config.ENG_WOQ_CLEAN_PATH,
+        trainT5(config.TRAIN_PATH,
+                config.VALIDATION_PATH,
                 config.T5_MODEL_PATH,
-                config.T5_LOGGING_PATH)
+                config.T5_LOGGING_PATH,
+                30, 16)
 
 
 if __name__ == "__main__":

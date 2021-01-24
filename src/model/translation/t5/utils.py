@@ -1,13 +1,21 @@
 from transformers import T5TokenizerFast
 from torch.utils.data import DataLoader, Dataset
+
 from functools import partial
+import os
 
 
 class MyDataset(Dataset):
-    def __init__(self, mrnDtPth, engPth):
+    def __init__(self, path):
         super(MyDataset, self).__init__()
         self.data = []
-        with open(mrnDtPth, "r") as mrnFl, open(engPth, "r") as engFl:
+        mrnPth = path + "maranao.txt"
+        engPth = path + "english.txt"
+
+        assert os.path.isfile(mrnPth), f"{mrnPth} does not exist"
+        assert os.path.isfile(engPth), f"{engPth} does not exist"
+
+        with open(mrnPth, "r") as mrnFl, open(engPth, "r") as engFl:
             for mrn, eng in zip(mrnFl, engFl):
                 src = "translate Maranao to English: " + mrn
                 self.data.append((src, eng))

@@ -2,6 +2,8 @@
 MRN_WOQ_CLEAN_PATH = "../clean_data/source/mrnWOQBClnd.txt"
 MRN_ALL_CLEAN_PATH = "../clean_data/source/mrnAllClnd.txt"
 ENG_WOQ_CLEAN_PATH = "../clean_data/source/engWOQBClnd.txt"
+TRAIN_PATH = "../clean_data/source/train_dataset/"
+VALIDATION_PATH = "../clean_data/source/validation_dataset/"
 
 # TOKENIZER 
 BPE_PATH = "../data/tokenizer/bpe/"
