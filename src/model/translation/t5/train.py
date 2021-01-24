@@ -48,10 +48,8 @@ def run(trainPth: str, validPth: str,
                                     seed=42,
                                     logging_dir=loggingPth,
                                     load_best_model_at_end=True,
-                                    metric_for_best_model="eval_bleu",
                                     save_total_limit=2,
-                                    dataloader_num_workers=4,
-                                    predict_with_generate=True)  # 4 * nGpu
+                                    dataloader_num_workers=4)  # 4 * nGpu
 
     trainer = Seq2SeqTrainer(model=model,
                              args=args,
