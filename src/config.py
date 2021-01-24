@@ -1,7 +1,7 @@
 # DATA SOURCE
-MRN_WOQ_CLEAN_PATH = "../clean_data/source/mrnWOQClnd.txt"
+MRN_WOQ_CLEAN_PATH = "../clean_data/source/mrnWOQBClnd.txt"
 MRN_ALL_CLEAN_PATH = "../clean_data/source/mrnAllClnd.txt"
-ENG_WOQ_CLEAN_PATH = "../clean_data/source/engWOQClnd.txt"
+ENG_WOQ_CLEAN_PATH = "../clean_data/source/engWOQBClnd.txt"
 
 # TOKENIZER 
 BPE_PATH = "../data/tokenizer/bpe/"
