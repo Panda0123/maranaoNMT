@@ -9,15 +9,25 @@ from transformers import (
 
 from functools import partial
 import sys
+import os
 
+
+def checkPath(pth):
+    # check if dir exists
+    assert os.path.isdir(pth), "{pth} does is not dir."
 
 def run(trainPth: str, validPth: str,
-        savePth: str, loggingPth: str,
-        nEpochs: int, bS: int):
+        savePth: str, savePthFinal: str,
+        loggingPth: str, nEpochs: int, bS: int):
+    # check paths
+    checkPath(trainPth)
+    checkPath(validPth)
+    checkPath(savePth)
+    checkPath(savePthFinal)
+    checkPath(loggingPth)
 
     # load tokenizers
     tokenizer = T5TokenizerFast.from_pretrained("t5-small")
-    # mrnTok = T5TokenizerFast(mrnTokPth)
 
     # load Data
     trainDts = utils.MyDataset(trainPth)
@@ -47,7 +57,7 @@ def run(trainPth: str, validPth: str,
                                     warmup_steps=500,
                                     seed=42,
                                     logging_dir=loggingPth,
-                                    load_best_model_at_end=True,
+                                    load_best_model_at_end=False,
                                     save_total_limit=2,
                                     dataloader_num_workers=4)  # 4 * nGpu
 
@@ -59,6 +69,7 @@ def run(trainPth: str, validPth: str,
                              train_dataset=trainDts,
                              eval_dataset=validDts)
     trainer.train()
+    trainer.save_model(savePthFinal)
     return trainer
 
 

@@ -14,7 +14,8 @@ T5_LOGGING_PATH = "../logs/t5/"
 MRANAX_LOGGING_PATH = "../logs/mranax/"
 
 # MODEL PATH
-T5_MODEL_PATH = "../clean_data/model/t5/"
-MRANAX_MODEL_PATH = "../clean_data/model/mranax/"
+T5_MODEL_PATH = "../data/model/t5/"
+T5_MODEL_PATH_FINAL = "../data/model/t5/final/"
+MRANAX_MODEL_PATH = "../data/model/mranax/"
 
 VOCAB_SIZE = 24500

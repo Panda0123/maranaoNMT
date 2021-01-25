@@ -5,7 +5,7 @@ from model.translation.t5.train import run as trainT5
 from model.translation.mranax.train import run as mranax
 
 
-def run(model: str):
+def run(model: str, nEpochs: int):
     if model == "bpe":
         tokenizer.trainBPE(config.MRN_ALL_CLEAN_PATH,
                            config.BPE_PATH,
@@ -22,11 +22,14 @@ def run(model: str):
                config.MRANAX_MODEL_PATH,
                config.MRANAX_LOGGING_PATH)
     if model == "t5":
-        trainT5(config.TRAIN_PATH,
-                config.VALIDATION_PATH,
-                config.T5_MODEL_PATH,
-                config.T5_LOGGING_PATH,
-                30, 16)
+        trainer = trainT5(config.TRAIN_PATH,
+                          config.VALIDATION_PATH,
+                          config.T5_MODEL_PATH,
+                          config.T5_MODEL_PATH_FINAL,
+                          config.T5_LOGGING_PATH,
+                          nEpochs, 16)
+
+    return trainer
 
 
 if __name__ == "__main__":
@@ -35,6 +38,11 @@ if __name__ == "__main__":
         "--model",
         type=str
     )
+    parser.add_argument(
+        "--nepochs",
+        type=int
+    )
     args = parser.parse_args()
     model = args.model
-    run(model)
+    nEpochs = args.nepochs
+    trainer = run(model, nEpochs)
