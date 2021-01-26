@@ -2,5 +2,5 @@
 *~
 **/__pycache__
 data/
-/src/model/mlm
-/src/scrape
+src/model/mlm
+src/scrape
