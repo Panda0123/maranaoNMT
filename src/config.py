@@ -1,21 +1,27 @@
-# DATA SOURCE
-MRN_WOQ_CLEAN_PATH = "../clean_data/source/mrnWOQBClnd.txt"
-MRN_ALL_CLEAN_PATH = "../clean_data/source/mrnAllClnd.txt"
-ENG_WOQ_CLEAN_PATH = "../clean_data/source/engWOQBClnd.txt"
-TRAIN_PATH = "../clean_data/source/train_dataset/"
-VALIDATION_PATH = "../clean_data/source/validation_dataset/"
+import torch
+
+# MODEL 
+model = "t5"
+num_layers = 3  # both encoder and decoder
+dropout_rate = 0.1
+
+# TRAINING
+num_epochs = 60
+batch_size = 16
+lr = 1e-4
+warmup_steps = 500
+num_workers = 4 * torch.cuda.device_count() if torch.cuda.is_available() else 1
+save_interval = 600
+log_interval = 600
+
+# PATHS
+train_path = "../clean_data/source/train_dataset/"
+validation_path = "../clean_data/source/validation_dataset/"
+model_path = "../data/model/t5/"
+model_final_path = "../data/model/t5/final/"
+logging_path = "../logs/t5/"
 
 # TOKENIZER 
-BPE_PATH = "../data/tokenizer/bpe/"
-SP_PATH = "../data/tokenizer/sp/sp.model"
-
-# LOGGING PATH
-T5_LOGGING_PATH = "../logs/t5/"
-MRANAX_LOGGING_PATH = "../logs/mranax/"
-
-# MODEL PATH
-T5_MODEL_PATH = "../data/model/t5/"
-T5_MODEL_PATH_FINAL = "../data/model/t5/final/"
-MRANAX_MODEL_PATH = "../data/model/mranax/"
-
-VOCAB_SIZE = 24500
+TOKENIZER_DATASET_PATH = "../clean_data/source/tokenizer_dataset.txt"  # used to the tokenizer
+SP_PATH = "../clean_data/tokenizer/sp.model"
+VOCAB_SIZE = 30000

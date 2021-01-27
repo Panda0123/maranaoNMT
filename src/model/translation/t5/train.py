@@ -14,52 +14,69 @@ import os
 
 def checkPath(pth):
     # check if dir exists
-    assert os.path.isdir(pth), "{pth} does is not dir."
+    assert os.path.isdir(pth), f"{pth} does is not dir."
 
-def run(trainPth: str, validPth: str,
-        savePth: str, savePthFinal: str,
-        loggingPth: str, nEpochs: int, bS: int):
+
+def run(
+    num_layers: int,
+    dropout_rate: float,
+    num_epochs: int,
+    batch_size: int,
+    lr: float,
+    warmup_steps: int,
+    num_workers: int,
+    save_interval: int,
+    log_interval: int,
+    train_path: str,
+    validation_path: str,
+    model_path: str,
+    model_final_path: str,
+    logging_path: str
+):
+
     # check paths
-    checkPath(trainPth)
-    checkPath(validPth)
-    checkPath(savePth)
-    checkPath(savePthFinal)
-    checkPath(loggingPth)
+    checkPath(train_path)
+    checkPath(validation_path)
+    checkPath(model_path)
+    checkPath(model_final_path)
+    checkPath(logging_path)
 
     # load tokenizers
     tokenizer = T5TokenizerFast.from_pretrained("t5-small")
 
     # load Data
-    trainDts = utils.MyDataset(trainPth)
-    validDts = utils.MyDataset(validPth)
+    trainDts = utils.MyDataset(train_path)
+    validDts = utils.MyDataset(validation_path)
     collateFn = partial(utils.collateFn, tokenizer=tokenizer)
 
     # load model
     modelConfig = T5Config(
         vocab_size=tokenizer.vocab_size,
-        num_layers=3,
-        dropout_rate=0.1,
+        num_layers=num_layers,
+        dropout_rate=dropout_rate,
         decoder_start_token_id=tokenizer.pad_token_id
     )
     model = T5ForConditionalGeneration(modelConfig)
     print("Number of parameters:", sum(p.numel() for p in model.parameters()))
 
     # instantiate training arguments
-    args = Seq2SeqTrainingArguments(output_dir=savePth,
+    args = Seq2SeqTrainingArguments(output_dir=model_path,
                                     overwrite_output_dir=True,
                                     do_train=True,
                                     do_eval=True,
                                     evaluation_strategy="epoch",
-                                    per_device_train_batch_size=bS,
-                                    per_device_eval_batch_size=bS,
-                                    learning_rate=1e-4,
-                                    num_train_epochs=nEpochs,
-                                    warmup_steps=500,
+                                    per_device_train_batch_size=batch_size,
+                                    per_device_eval_batch_size=batch_size,
+                                    learning_rate=lr,
+                                    num_train_epochs=num_epochs,
+                                    warmup_steps=warmup_steps,
                                     seed=42,
-                                    logging_dir=loggingPth,
+                                    logging_dir=logging_path,
                                     load_best_model_at_end=False,
                                     save_total_limit=2,
-                                    dataloader_num_workers=4)  # 4 * nGpu
+                                    save_steps=save_interval,
+                                    logging_steps=log_interval,
+                                    dataloader_num_workers=num_workers)
 
     trainer = Seq2SeqTrainer(model=model,
                              args=args,
@@ -69,20 +86,9 @@ def run(trainPth: str, validPth: str,
                              train_dataset=trainDts,
                              eval_dataset=validDts)
     trainer.train()
-    trainer.save_model(savePthFinal)
+    trainer.save_model(model_final_path)
     return trainer
 
 
 if __name__ == "__main__":
     pass
-    # import config
-    # mrnDtPth = config.MRN_WOQ_CLEAN_PATH
-    # engDtPth = config.ENG_WOQ_CLEAN_PATH
-    # mrnTokPth = config.SP_PATH
-    # savePth = config.T5_MODEL_PATH
-    # loggingPth = config.T5_LOGGING_PATH
-    # vocabSize = config.VOCAB_SIZE
-
-    # run(mrnDtPth, engDtPth, mrnTokPth, savePth, loggingPth, vocabSize)
-    # res = torch.cat((torch.tensor([engTok.pad_token_id]), trgIds[0]))
-    # loss = model(input_ids=srcIds, labels=res))
