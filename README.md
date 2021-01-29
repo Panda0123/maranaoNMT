@@ -19,17 +19,12 @@ The tokenizer used is the pre-trained [small-t5](https://huggingface.co/t5-small
 
 The pre-trained model is trained on scraped data online.
 The [dataset](clean_data/source) is pretty small and not of great quality as such the model is trained with 3 layers only for both the encoder and decoder.
-Model's parameters can be modified. The trained model has  ~`39M` parameters.
-The parameters of the model and training are in [config.py](#src/config.py).
+Model's  can be modified. The trained model has  ~`39M` parameters.
+The parameters and hyperparameters are in [config.py](#src/config.py).
 
 ### Test Model
 The easiest way to test the model is in [google colab](https://colab.research.google.com/drive/1zC4J25X7smDdEEse7Tt2gxzIE-vbNVWG?usp=sharing).
 You may translate phrase/senentece by modifying corresponding variables as instructed in the notebook.
-
-### Download Pre-trained Model <div id='download'> </div>
-The pre-trained model is currently hosted in [google drive](https://drive.google.com/drive/folders/1be4kGVViFSPMh2ZnhJ_gxyWXrmMVolGd).
-Download the three files and store it in one file.
-You need to store that file in `clean_data/model/` to use it with this repository.
 
 ### Train Model
 To train a model move to `src` directory and run `train.py` script while passing parameters like described below or just edit `train_config.py`.
@@ -49,15 +44,22 @@ python train.py \
     --validation_path="../clean_data/source/validation_dataset/"  \
     --model_path="../data/model/t5/" \
     --model_final_path="../data/model/final/t5/" \
-    --logging_path="../data/model/final/t5/"
+    --logging_path="../data/model/final/t5/" \
+    --load_model=False
 ```
 If one of the argument is not passed it will use the default in [config.py](src/config.py).
 As such you may just run `python train.py` and use the default parameters in [config.py](src/config.py).
 Additionally, the structure of the dataset to be used for training must follow [this](#dataset).
 
+### Download Pre-trained Model <div id='download'> </div>
+The pre-trained model is currently hosted in [google drive](https://drive.google.com/drive/folders/1be4kGVViFSPMh2ZnhJ_gxyWXrmMVolGd).
+1. Download the three files and store them in one directory.
+1. Instantiate `model_final_path` in [config.py](#src/config.py) to the relative path of that directory.
+
 ### Finetune Model
-To finetune the pre-trained model, [download](#download) the model and store it in `clean_data/model/`.
-Or anywhere as long as you pass the relative path in the argument. Then just run `python finetune.py`.
+To finetune the pre-trained model, [download](#download) the model.
+After instantiating the `model_final_path`, run `python train.py --loade_model=True`.
+This will continue the training of the model.
 
 ### Dataset
 The dataset is stored in `clean_data/source/`. The structure of training and validation dataset is demostrated below.
@@ -79,3 +81,8 @@ The dataset is stored in `clean_data/source/`. The structure of training and val
 ## TODO
 * script for finetune
 * train a translation specific architecture.
+
+maranaoNMT:
+    - model
+        - T5
+    - trainer
