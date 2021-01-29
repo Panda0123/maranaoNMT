@@ -31,7 +31,8 @@ def run(
     validation_path: str,
     model_path: str,
     model_final_path: str,
-    logging_path: str
+    logging_path: str,
+    load_model: bool
 ):
 
     # check paths
@@ -50,13 +51,18 @@ def run(
     collateFn = partial(utils.collateFn, tokenizer=tokenizer)
 
     # load model
-    modelConfig = T5Config(
-        vocab_size=tokenizer.vocab_size,
-        num_layers=num_layers,
-        dropout_rate=dropout_rate,
-        decoder_start_token_id=tokenizer.pad_token_id
-    )
-    model = T5ForConditionalGeneration(modelConfig)
+    if load_model:
+        print(f"Load model in {model_final_path}")
+        model = T5ForConditionalGeneration.from_pretrained(model_final_path)
+        model.train()
+    else:
+        modelConfig = T5Config(
+            vocab_size=tokenizer.vocab_size,
+            num_layers=num_layers,
+            dropout_rate=dropout_rate,
+            decoder_start_token_id=tokenizer.pad_token_id
+        )
+        model = T5ForConditionalGeneration(modelConfig)
     print("Number of parameters:", sum(p.numel() for p in model.parameters()))
 
     # instantiate training arguments
