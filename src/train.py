@@ -49,7 +49,8 @@ def run(
                           model_path,
                           model_final_path,
                           logging_path,
-                          load_model)
+                          load_model,
+                          tokenizer_config.tokenizer_path)
 
     return trainer
 

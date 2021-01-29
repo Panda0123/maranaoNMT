@@ -32,7 +32,8 @@ def run(
     model_path: str,
     model_final_path: str,
     logging_path: str,
-    load_model: bool
+    load_model: bool,
+    tokenizer_path: str
 ):
 
     # check paths
@@ -43,7 +44,10 @@ def run(
     checkPath(logging_path)
 
     # load tokenizers
-    tokenizer = T5TokenizerFast.from_pretrained("t5-small")
+    if tokenizer_path is None:
+        tokenizer = T5TokenizerFast.from_pretrained("t5-small")
+    else:
+        tokenizer = T5TokenizerFast(tokenizer_path+"sp.model")
 
     # load Data
     trainDts = utils.MyDataset(train_path)
