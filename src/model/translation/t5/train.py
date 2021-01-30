@@ -14,7 +14,7 @@ import os
 
 def checkPath(pth):
     # check if dir exists
-    assert os.path.isdir(pth), f"{pth} does is not dir."
+    assert os.path.isdir(pth), f"{pth} is not a dir."
 
 
 def run(
@@ -33,7 +33,6 @@ def run(
     model_final_path: str,
     logging_path: str,
     load_model: bool,
-    tokenizer_path: str
 ):
 
     # check paths
@@ -44,10 +43,7 @@ def run(
     checkPath(logging_path)
 
     # load tokenizers
-    if tokenizer_path is None:
-        tokenizer = T5TokenizerFast.from_pretrained("t5-small")
-    else:
-        tokenizer = T5TokenizerFast(tokenizer_path+"sp.model")
+    tokenizer = T5TokenizerFast.from_pretrained("t5-small")
 
     # load Data
     trainDts = utils.MyDataset(train_path)
@@ -98,7 +94,3 @@ def run(
     trainer.train()
     trainer.save_model(model_final_path)
     return trainer
-
-
-if __name__ == "__main__":
-    pass

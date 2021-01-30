@@ -33,13 +33,13 @@ python train.py \
     --model=t5 \
     --num_layers=3 \
     --dropout_rate=0.1
-    --num_epochs=60 \
+    --num_epochs=65 \
     --batch_size=16 \
     --lr=1e-4 \
     --warmup_steps=500 \
     --num_workers=4 \
-    --save_interval=600 \
-    --log_interval=600 \
+    --save_interval=659 \
+    --log_interval=659 \
     --train_path="../clean_data/source/train_dataset/" \
     --validation_path="../clean_data/source/validation_dataset/"  \
     --model_path="../data/model/t5/" \
@@ -47,8 +47,8 @@ python train.py \
     --logging_path="../data/model/final/t5/" \
     --load_model=False
 ```
-If one of the argument is not passed it will use the default in [config.py](src/config.py).
-As such you may just run `python train.py` and use the default parameters in [config.py](src/config.py).
+If one of the argument is not passed the default in [config.py](src/config.py) will be used.
+As such you may just run `python train.py` and use the default parameters.
 Additionally, the structure of the dataset to be used for training must follow [this](#dataset).
 
 ### Download Pre-trained Model <div id='download'> </div>
@@ -79,10 +79,4 @@ The dataset is stored in `clean_data/source/`. The structure of training and val
 * Line number specify their relation.
 
 ## TODO
-* script for finetune
 * train a translation specific architecture.
-
-maranaoNMT:
-    - model
-        - T5
-    - trainer

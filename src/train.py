@@ -49,8 +49,7 @@ def run(
                           model_path,
                           model_final_path,
                           logging_path,
-                          load_model,
-                          tokenizer_config.tokenizer_path)
+                          load_model)
 
     return trainer
 
@@ -152,6 +151,6 @@ if __name__ == "__main__":
     elif args.model == "sp":
         final_args = getArgsTokenizer(args)
     else:
-        print(f"{args.model} is invalid.")
+        raise ValueError(f"{args.model} is invalid.")
 
     trainer = run(**final_args)
