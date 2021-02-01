@@ -17,17 +17,20 @@ The tokenizer used is the pre-trained [small-t5](https://huggingface.co/t5-small
 
 ### Model
 
-The pre-trained model is trained on scraped data online.
-The [dataset](clean_data/source) is pretty small and not of great quality as such the model is trained with 3 layers only for both the encoder and decoder.
-Model's  can be modified. The trained model has  ~`39M` parameters.
-The parameters and hyperparameters are in [config.py](#src/config.py).
+There are two models: 
+1. `t5-small` from huggingface compose of ~60M parameters. This pre-trained model is finetuned on this task for 65 epochs.
+2. `t5-extra-small` which is trained using the hyperparameters [below](#train-model). It has ~39M parameters.
+
+Theese models are trained on scraped data online.
+The [dataset](clean_data/source) is pretty small and not of great quality.
+The parameters and hyperparameters for `t5-extra-small` and training are in [config.py](#src/config.py).
 
 ### Test Model
-The easiest way to test the model is in [google colab](https://colab.research.google.com/drive/1zC4J25X7smDdEEse7Tt2gxzIE-vbNVWG?usp=sharing).
+The easiest way to test the models is in [google colab](https://colab.research.google.com/drive/1zC4J25X7smDdEEse7Tt2gxzIE-vbNVWG?usp=sharing).
 You may translate phrase/senentece by modifying corresponding variables as instructed in the notebook.
 
 ### Train Model
-To train a model move to `src` directory and run `train.py` script while passing parameters like described below or just edit `train_config.py`.
+To train a model move to `src` directory and run `train.py` script while passing hyperparameters like described below or just edit `train_config.py`.
 ```
 python train.py \
     --model=t5 \
@@ -52,7 +55,7 @@ As such you may just run `python train.py` and use the default parameters.
 Additionally, the structure of the dataset to be used for training must follow [this](#dataset).
 
 ### Download Pre-trained Model <div id='download'> </div>
-The pre-trained model is currently hosted in [google drive](https://drive.google.com/drive/folders/1be4kGVViFSPMh2ZnhJ_gxyWXrmMVolGd).
+The pre-trained model is currently hosted in [google drive](https://drive.google.com/file/d/1G2IJpmhUV9m0wJZbkHcta5Srl6z7x0VE/view?usp=sharing).
 1. Download the three files and store them in one directory.
 1. Instantiate `model_final_path` in [config.py](#src/config.py) to the relative path of that directory.
 
@@ -77,6 +80,6 @@ The dataset is stored in `clean_data/source/`. The structure of training and val
 * The Maranao and English are separated.
 * Each entry/line corresponds to 1 phrase/sentece.
 * Line number specify their relation.
-
 ## TODO
+* use a pre-trained model to finetune on this task.
 * train a translation specific architecture.
