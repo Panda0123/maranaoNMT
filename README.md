@@ -21,7 +21,7 @@ There are two models:
 
 These models are trained on scraped data online.
 The [dataset](clean_data/source) is pretty small and not of great quality.
-The parameters and hyperparameters for `t5-extra-small` and training are in [model_train_config.py](#src/model_train_config.py).
+The parameters and hyperparameters for `t5-extra-small` and training are in [model_train_config.py](src/model_train_config.py).
 
 ### Test Model
 The easiest way to test the models is in [google colab](https://colab.research.google.com/drive/1zC4J25X7smDdEEse7Tt2gxzIE-vbNVWG?usp=sharing).
@@ -67,13 +67,13 @@ The pre-trained model is currently hosted in [google drive](https://drive.google
 >     ├── pytorch_model.bin
 >     └── training_args.bin
 >``````
-3. Instantiate `model_final_path` in [model_train_config.py](#src/model_train_config.py) to the relative path of the chosen 
+3. Instantiate `model_final_path` in [model_train_config.py](src/model_train_config.py) to the relative path of the chosen 
 model whether `MRN_NMT_t5_small` or `MRN_NMT_t5_extra_small` directory.
 
 ### Finetune Model
 To finetune the pre-trained model, [download](#download) the model.
 After instantiating the `model_final_path`, run `python train.py --model=t5 --loade_model=True`.
-This will continue the training of the model.
+The --load_model=True arguement will load the model from `model_final_path` and train it.
 
 ### Dataset
 The dataset is stored in `clean_data/source/`. The structure of training and validation dataset is demonstrated below.
