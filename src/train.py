@@ -143,29 +143,6 @@ def createArgumentParser():
     return args
 
 
-# def getArgsModel(args):
-#     final_args = {}
-#     for attr in vars(args):
-#         if attr in vars(model_train_config):
-#             val = getattr(args, attr)
-#             final_args[attr] = getattr(
-#                 model_train_config, attr) if val is None else val
-#         else:
-#             final_args[attr] = None
-#     return final_args
-
-
-# def getArgsTokenizer(args):
-#     final_args = {}
-#     for attr in vars(args):
-#         if attr in vars(tokenizer_config):
-#             val = getattr(args, attr)
-#             final_args[attr] = getattr(
-#                 tokenizer_config, attr) if val is None else val
-#         else:
-#             final_args[attr] = None
-#     return final_args
-
 def getArgs(args, configuration):
     final_args = {}
     for attr in vars(args):
