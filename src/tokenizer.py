@@ -1,4 +1,3 @@
-
 def trainSP(sourcePth: str,
             savePth: str,
             vocabSize: int,

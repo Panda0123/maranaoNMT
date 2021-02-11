@@ -13,11 +13,13 @@ warmup_steps = 500
 num_workers = 4 * torch.cuda.device_count() if torch.cuda.is_available() else 1
 save_interval = 659  # num steps per epoch
 log_interval = 659
-load_model = False  # wherether to continue training
 
 # PATHS
-train_path = "../clean_data/source/train_dataset/"
+# train_path = "../clean_data/source/train_dataset/"  # for translation
+train_path = "../clean_data/source/tokenizer_dataset_full.txt"  # for mlm/pretraining
 validation_path = "../clean_data/source/validation_dataset/"
 model_path = "../data/model/t5/"
 model_final_path = "../data/model/t5/final/"
 logging_path = "../logs/t5/"
+load_model_path = None  # path of a trained model to be loaded
+load_tokenizer_path = None  # path of a trained tokenizer to be loaded else uses t5-small by default

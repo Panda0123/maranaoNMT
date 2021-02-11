@@ -95,5 +95,7 @@ clean_data
 * Each entry/line corresponds to 1 phrase/sentence.
 * Line numbers specify their relation.
 ## TODO
+* pretrain extra-small on scapred data using I.i.d. noise replace token.
+    - unlike in the original they pretrained on mixture of unsupervised and superviesd  multi task.
 * convert model to tensorflow, to tflite
 * train a translation specific architecture.

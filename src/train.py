@@ -1,10 +1,13 @@
 import argparse
-import sys
+import os
 
 import model_train_config
 import tokenizer_config
 import tokenizer
-from model.translation.t5.train import run as trainT5
+from model.t5.train_translation import  run as trainT5Translation
+from model.t5.train_mlm import run  as trainT5Pretraining
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 
 def run(
@@ -23,10 +26,11 @@ def run(
     model_path: str,
     model_final_path: str,
     logging_path: str,
-    load_model: bool,
+    load_model_path: str,
     tokenizer_dataset_path: str,
     tokenizer_path: str,
-    vocab_size: int
+    load_tokenizer_path: str,
+    vocab_size: int,
 ):
     trainer = None
     if model == "sp":
@@ -34,22 +38,39 @@ def run(
                                     tokenizer_path,
                                     vocab_size,
                                     modelPrefix=model)
-    elif model == "t5":
-        trainer = trainT5(num_layers,
-                          dropout_rate,
-                          num_epochs,
-                          batch_size,
-                          lr,
-                          warmup_steps,
-                          num_workers,
-                          save_interval,
-                          log_interval,
-                          train_path,
-                          validation_path,
-                          model_path,
-                          model_final_path,
-                          logging_path,
-                          load_model)
+    elif model == "t5_pretraining":  # masked language modelling and replacing noise tokens
+        trainer = trainT5Pretraining(num_layers,
+                                      dropout_rate,
+                                      num_epochs,
+                                      batch_size,
+                                      lr,
+                                      warmup_steps,
+                                      num_workers,
+                                      save_interval,
+                                      log_interval,
+                                      train_path,
+                                      model_path,
+                                      model_final_path,
+                                      logging_path,
+                                      load_model_path=load_model_path,
+                                      load_tokenizer_path=load_tokenizer_path)
+    elif model == "t5_translation":
+        trainer = trainT5Translation(num_layers,
+                                      dropout_rate,
+                                      num_epochs,
+                                      batch_size,
+                                      lr,
+                                      warmup_steps,
+                                      num_workers,
+                                      save_interval,
+                                      log_interval,
+                                      train_path,
+                                      validation_path,
+                                      model_path,
+                                      model_final_path,
+                                      logging_path,
+                                      load_model_path,
+                                      load_tokenizer_path)
 
     return trainer
 
@@ -93,7 +114,7 @@ def createArgumentParser():
                         help="relative path to the valid dataset",
                         type=str)
     parser.add_argument("--model_path",
-                        help="relative path to where model will be constantly save",
+                        help="relative path to where model will be constantly save throughout training",
                         type=str)
     parser.add_argument("--model_final_path",
                         help="relative path to where final model will be save",
@@ -101,9 +122,9 @@ def createArgumentParser():
     parser.add_argument("--logging_path",
                         help="relative path to store logging",
                         type=str)
-    parser.add_argument("--load_model",
-                        help="where to load model in model_final_path for continue training/fine tuning",
-                        type=bool)
+    parser.add_argument("--load_model_path",
+                        help="relative path of the model to load",
+                        type=str)
     parser.add_argument("--tokenizer_dataset_path",
                         help="path of the dataset for tokenizer to train on tokenizer ",
                         type=str)
@@ -113,31 +134,45 @@ def createArgumentParser():
     parser.add_argument("--vocab_size",
                         help="size of the tokenizer vocabulary",
                         type=int)
+    parser.add_argument("--load_tokenizer_path",
+                        help="relative path of the tokenizer to load",
+                        type=bool)
 
     # tokenizer
     args = parser.parse_args()
     return args
 
 
-def getArgsModel(args):
-    final_args = {}
-    for attr in vars(args):
-        if attr in vars(model_train_config):
-            val = getattr(args, attr)
-            final_args[attr] = getattr(
-                model_train_config, attr) if val is None else val
-        else:
-            final_args[attr] = None
-    return final_args
+# def getArgsModel(args):
+#     final_args = {}
+#     for attr in vars(args):
+#         if attr in vars(model_train_config):
+#             val = getattr(args, attr)
+#             final_args[attr] = getattr(
+#                 model_train_config, attr) if val is None else val
+#         else:
+#             final_args[attr] = None
+#     return final_args
 
 
-def getArgsTokenizer(args):
+# def getArgsTokenizer(args):
+#     final_args = {}
+#     for attr in vars(args):
+#         if attr in vars(tokenizer_config):
+#             val = getattr(args, attr)
+#             final_args[attr] = getattr(
+#                 tokenizer_config, attr) if val is None else val
+#         else:
+#             final_args[attr] = None
+#     return final_args
+
+def getArgs(args, configuration):
     final_args = {}
     for attr in vars(args):
-        if attr in vars(tokenizer_config):
+        if attr in vars(configuration):
             val = getattr(args, attr)
             final_args[attr] = getattr(
-                tokenizer_config, attr) if val is None else val
+                configuration, attr) if val is None else val
         else:
             final_args[attr] = None
     return final_args
@@ -146,11 +181,10 @@ def getArgsTokenizer(args):
 if __name__ == "__main__":
     args = createArgumentParser()
     assert args.model is not None, "Enter name of the mode using flag --model"
-    if args.model == "t5":
-        final_args = getArgsModel(args)
+    if args.model == "t5_translation" or args.model == "t5_pretraining":
+        final_args = getArgs(args, model_train_config)
     elif args.model == "sp":
-        final_args = getArgsTokenizer(args)
+        final_args = getArgs(args, tokenizer_config)
     else:
         raise ValueError(f"{args.model} is invalid.")
-
     trainer = run(**final_args)
