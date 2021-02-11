@@ -42,7 +42,7 @@ def run(
         tokenizer = T5TokenizerFast.from_pretrained("t5-small")
     else:
         print(f"Loading tokenizer in {load_tokenizer_path}...")
-        tokenizer = T5TokenizerFast(tokenizer_path)
+        tokenizer = T5TokenizerFast(load_tokenizer_path)
         print(f"Successfully loaded tokenizer in {load_tokenizer_path}.")
 
     # load Data

@@ -22,4 +22,4 @@ model_path = "../data/model/t5/"
 model_final_path = "../data/model/t5/final/"
 logging_path = "../logs/t5/"
 load_model_path = None  # path of a trained model to be loaded
-load_tokenizer_path = None  # path of a trained tokenizer to be loaded else uses t5-small by default
+load_tokenizer_path = "../clean_data/tokenizer/sp.model"  # path of a trained tokenizer to be loaded else uses t5-small by default
