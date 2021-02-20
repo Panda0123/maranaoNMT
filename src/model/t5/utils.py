@@ -165,7 +165,7 @@ class PretrainingDataset(Dataset):
         assert os.path.isfile(path), f"{path} does not exist"
 
         # TODO: add multithreading for loading data
-        with open(path, "r") as fl:
+        with open(path, "r", errors="ignore") as fl:
             for line in fl.readlines():
                 dct = span_corruption(tokenizer(line).input_ids,
                                       tokenizer,
