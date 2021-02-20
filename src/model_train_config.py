@@ -15,8 +15,8 @@ save_interval = 659  # num steps per epoch
 log_interval = 659
 
 # PATHS
-train_path = "../clean_data/source/train_dataset/"  # for translation
-# train_path = "../clean_data/source/tokenizer_dataset_full.txt"  # for mlm/pretraining
+# train_path = "../clean_data/source/train_dataset/"  # for translation
+train_path = "../clean_data/source/mlm_training_dataset.txt"  # for mlm/pretraining
 validation_path = "../clean_data/source/validation_dataset/"
 model_path = "../data/model/t5/"
 model_final_path = "../data/model/t5/final/"

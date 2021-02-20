@@ -5,7 +5,8 @@ def trainSP(sourcePth: str,
     import shutil
     import sentencepiece as sp
     print("Training Sentence Piece Tokenizer")
-    command = ('--input=%s --model_prefix=%s --vocab_size=%s' %
+    # special tokens ids are modified to fit with t5 tokenizer from hugging face
+    command = ('--input=%s --model_prefix=%s --bos_id=-1 --pad_id=0 --eos_id=1 --unk_id=2 --vocab_size=%s' %
                (sourcePth, modelPrefix, vocabSize))
     sp.SentencePieceTrainer.train(command)
     shutil.move(f"{modelPrefix}.vocab", savePth)
