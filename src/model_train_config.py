@@ -1,7 +1,7 @@
 import torch
 
 # MODEL 
-model = "t5"
+model = "t5_pretraining"
 num_layers = 3  # both encoder and decoder
 dropout_rate = 0.1
 
@@ -11,8 +11,8 @@ batch_size = 16
 lr = 1e-4
 warmup_steps = 500
 num_workers = 4 * torch.cuda.device_count() if torch.cuda.is_available() else 1
-save_interval = 659  # num steps per epoch
-log_interval = 659
+save_interval = 3768  # num steps per epoch
+log_interval = 3768
 
 # PATHS
 # train_path = "../clean_data/source/train_dataset/"  # for translation
