@@ -3,7 +3,7 @@ Neural Machine Translation from Maranao Language to English and vice versa.
 The model uses  [Text-To-Text Transfer Transformer (T5)](https://arxiv.org/abs/1910.10683) architecture.
 Specifically, HuggingFace's [T5](https://huggingface.co/transformers/model_doc/t5.html) pytorch implementation was used.
 The pre-trained model (`t5-extra-small`) is trained in unsupervised way similar to the original paper (BERT-style: replacing spans and with noise density of 15% and span length of 3).
-The tokenizer used is sentence piece and trained using [this](data/source/tokenizer_dataset.txt) data for both languages.
+The tokenizer used is sentence piece and trained using [this](clean_data/source/tokenizer_dataset.txt) data for both languages.
 
 ## Table of Contents
 * [Model](#model)
@@ -18,7 +18,7 @@ The tokenizer used is sentence piece and trained using [this](data/source/tokeni
 Pre-trained Model:
 1. `t5-extra-small` - trained using the hyperparameters [below](#train-model). ~27M parameters
 
-Two finetuned-model: 
+Finetuned Model: 
 1. `t5-small` from HuggingFace which is finetuned on this task. ~60M parameters. 
 2. `t5-extra-small` the pre-trained model mentioned above which is also finetuned. ~27M parameters.
 
