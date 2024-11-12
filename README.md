@@ -6,7 +6,7 @@ Specifically, HuggingFace's [T5](https://huggingface.co/transformers/model_doc/t
 The pre-trained model (`t5-extra-small`) is trained in unsupervised way similar to the original paper (BERT-style: replacing spans and with noise density of 15% and span length of 3).
 The tokenizer used is sentence piece and trained using [this](clean_data/source/tokenizer_dataset.txt) data for both languages.
 
-Try the model [here](https://maranao-translator.jamcabs.site).
+Try the model [here](https://maranao-translator.vercel.app/).
 
 ## Table of Contents
 
